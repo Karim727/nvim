@@ -11,14 +11,14 @@ map("n", "<C-d>", "<C-d>zz")
 map("n", "<C-u>", "<C-u>zz")
 map("n", "n", "nzzzv")
 map("n", "N", "Nzzzv")
-
+-- map("n", "<C-A>", "ggVG", { desc = "Select all" })
 -- Toggle line wrap (VSCode Alt+Z style & leader uw)
 map("n", "<A-z>", "<cmd>set wrap!<CR>", { desc = "Toggle line wrap" })
 map("n", "<leader>uw", "<cmd>set wrap!<CR>", { desc = "Toggle line wrap" })
 
 -- Better navigation through wrapped lines (moves by visual line instead of physical line)
-map("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
-map("n", "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
+map("n", "j", "v:count == 1 ? 'gj' : 'j'", { expr = true, silent = true })
+map("n", "k", "v:count == 1 ? 'gk' : 'k'", { expr = true, silent = true })
 
 -- Delete word backwards with Ctrl + Backspace / Ctrl + h in Insert and Command modes
 map("i", "<C-BS>", "<C-w>", { desc = "Delete word backwards" })
@@ -27,9 +27,10 @@ map("c", "<C-BS>", "<C-w>", { desc = "Delete word backwards in command line" })
 map("c", "<C-h>", "<C-w>", { desc = "Delete word backwards in command line" })
 
 -- Delete or change without overwriting the default yank register
-map({ "n", "v" }, "x", '"_x', { desc = "Delete character without yanking" })
-map({ "n", "v" }, "<leader>d", '"_d', { desc = "Delete without yanking" })
-map("x", "p", 'p:let @+=@0<CR>:let @"=@0<CR>', { silent = true, desc = "Paste without overwriting yank buffer" })
+-- map({ "n", "v" }, "x", '"_x', { desc = "Delete character without yanking" })
+-- map({ "n", "v" }, "d", '"_d', { desc = "Delete without yanking" })
+-- map({ "n", "v" }, "c", '"_c', { desc = "Change without yanking" })
+-- map("x", "p", 'p:let @+=@0<CR>:let @"=@0<CR>', { silent = true, desc = "Paste without overwriting yank buffer" })
 
 -- Commenting shortcuts (VSCode Ctrl+/ and leader /)
 map("n", "<C-/>", "gcc", { remap = true, desc = "Toggle comment line" })
@@ -47,11 +48,11 @@ map("n", "<S-h>", "<cmd>BufferLineCyclePrev<CR>", { desc = "Previous Tab" })
 map("n", "<leader>bn", "<cmd>BufferLineCycleNext<CR>", { desc = "Next Tab" })
 map("n", "<leader>bp", "<cmd>BufferLineCyclePrev<CR>", { desc = "Previous Tab" })
 map("n", "<leader>bd", function()
-  if package.loaded["snacks"] and Snacks.bufdelete then
-    Snacks.bufdelete()
-  else
-    vim.cmd("bprevious | bdelete #")
-  end
+	if package.loaded["snacks"] and Snacks.bufdelete then
+		Snacks.bufdelete()
+	else
+		vim.cmd("bprevious | bdelete #")
+	end
 end, { desc = "Close current tab" })
 map("n", "<leader>bo", "<cmd>BufferLineCloseOthers<CR>", { desc = "Close other tabs" })
 
@@ -60,8 +61,8 @@ map("n", "<C-b>", "<cmd>Neotree toggle<CR>", { desc = "Toggle File Explorer" })
 
 -- Goto Definition (Smart LSP + Verilog/SystemVerilog + Hidden Folders)
 map("n", "gd", function()
-  require("util.def").goto_definition()
+	require("util.def").goto_definition()
 end, { desc = "Goto Definition (Smart LSP + Verilog/Hidden)" })
 map("n", "<C-]>", function()
-  require("util.def").goto_definition()
+	require("util.def").goto_definition()
 end, { desc = "Goto Definition (Smart LSP + Verilog/Hidden)" })
