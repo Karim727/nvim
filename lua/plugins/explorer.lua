@@ -20,6 +20,36 @@ return {
 					["l"] = "open",
 					["h"] = "close_node",
 					["C"] = "set_root",
+					["w"] = {
+						function(state)
+							local cur_width = vim.api.nvim_win_get_width(0)
+							local target = cur_width >= 75 and 32 or 85
+							vim.api.nvim_win_set_width(0, target)
+							state.win_width = target
+							require("neo-tree.ui.renderer").redraw(state)
+						end,
+						desc = "Toggle width (compact / metadata view)",
+					},
+					[">"] = {
+						function(state)
+							local cur_width = vim.api.nvim_win_get_width(0)
+							local target = cur_width + 10
+							vim.api.nvim_win_set_width(0, target)
+							state.win_width = target
+							require("neo-tree.ui.renderer").redraw(state)
+						end,
+						desc = "Increase window width (+10)",
+					},
+					["<"] = {
+						function(state)
+							local cur_width = vim.api.nvim_win_get_width(0)
+							local target = math.max(20, cur_width - 10)
+							vim.api.nvim_win_set_width(0, target)
+							state.win_width = target
+							require("neo-tree.ui.renderer").redraw(state)
+						end,
+						desc = "Decrease window width (-10)",
+					},
 					["."] = {
 						function(state)
 							local node = state.tree:get_node()
@@ -62,6 +92,20 @@ return {
 						end,
 						desc = "Open with System Application (xdg-open)",
 					},
+				},
+			},
+			default_component_configs = {
+				file_size = {
+					enabled = true,
+					required_width = 45, -- Min width to show file size (default was 64)
+				},
+				type = {
+					enabled = false, -- Hide type column to keep it clean
+				},
+				last_modified = {
+					enabled = true,
+					required_width = 70, -- Min width to show modified date (default was 88)
+					format = "%Y-%m-%d %H:%M",
 				},
 			},
 		},
