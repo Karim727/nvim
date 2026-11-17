@@ -213,10 +213,10 @@ function M.goto_definition()
 
   -- 3. STANDARD LSP PATH (for Python, Lua, Bash, C, etc. or if Verilog patterns weren't matched):
   local lsp_clients = vim.lsp.get_clients({ bufnr = bufnr })
-  local supports_def = false
+  local def_client = nil
   for _, client in ipairs(lsp_clients) do
     if client.supports_method("textDocument/definition") then
-      supports_def = true
+      def_client = client
       break
     end
   end
@@ -236,13 +236,14 @@ function M.goto_definition()
     end
   end
 
-  if not supports_def then
+  if not def_client then
     fallback_all()
     return
   end
 
   -- Query LSP with a fast 150ms timeout
-  local params = vim.lsp.util.make_position_params()
+  local offset_encoding = def_client.offset_encoding or "utf-16"
+  local params = vim.lsp.util.make_position_params(0, offset_encoding)
   local responded = false
 
   local timer = vim.defer_fn(function()

@@ -14,26 +14,18 @@ return {
 		},
 	},
 
-	-- nvim-surround with visual mode 'S'
+	-- nvim-surround with visual mode 's'
 	{
 		"kylechui/nvim-surround",
 		version = "*",
 		event = "VeryLazy",
-		opts = {
-			keymaps = {
-				insert = "<C-g>s",
-				insert_line = "<C-g>S",
-				normal = "ys",
-				normal_cur = "yss",
-				normal_line = "yS",
-				normal_cur_line = "ySS",
-				visual = "s",
-				visual_line = "gS",
-				delete = "ds",
-				change = "cs",
-				change_line = "cS",
-			},
-		},
+		opts = {},
+		config = function(_, opts)
+			require("nvim-surround").setup(opts)
+			vim.keymap.set("x", "s", "<Plug>(nvim-surround-visual)", {
+				desc = "Add a surrounding pair around a visual selection",
+			})
+		end,
 	},
 
 	-- Commenting engine with custom hardware language support
